@@ -1,36 +1,47 @@
 import {Question} from '../../src/qa/display/question';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from "prop-types";
 
-const mockTagHandler = {
-  onTagClicked: (tag) => alert(tag),
-  onTagSuggest: (partial) => {
-    return Promise.resolve([partial, 'hello', 'world'])
-  },
-  onTagInventNew: (tag) => {
-    return Promise.resolve(true);
+export class Demo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tags: ['one', 'two']
+    };
+    this.tagHandler = {
+      onTagClicked: (tag) => alert(tag),
+      onTagSuggest: (partial) => {
+        return Promise.resolve([partial, 'hello', 'world']);
+      },
+    };
   }
-};
+
+  render() {
+    return (<div>
+      <div className="example">
+        <Question title={"Hello"}
+                  body={"**body**"}
+                  questionId={'123'}
+                  tags={this.state.tags}
+                  edit={false}
+                  tagHandler={this.tagHandler}/>
+      </div>
+      <div className="example">
+        <Question title={"Hello"}
+                  body={"**body**"}
+                  questionId={'123'}
+                  tags={this.state.tags}
+                  edit={true}
+                  tagHandler={this.tagHandler}/>
+      </div>
+    </div>);
+  }
+}
+
 
 ReactDOM.render(
   <div>
-    <div className="example">
-      <Question title={"Hello"}
-                body={"**body**"}
-                questionId={'123'}
-                tags={['one', 'twp']}
-                edit={false}
-                tagHandler={mockTagHandler}/>
-    </div>
-    <div className="example">
-      <Question title={"Hello"}
-                body={"**body**"}
-                questionId={'123'}
-                tags={['one', 'twp']}
-                edit={true}
-                tagHandler={mockTagHandler}/>
-    </div>
+    <Demo/>
   </div>,
   document.getElementById('root')
 )

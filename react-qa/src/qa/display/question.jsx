@@ -21,7 +21,7 @@ export class Question extends React.Component {
   }
 
   onChangeTags(tags) {
-    alert(tags);
+    this.setState({tags: tags});
   }
 
   onChangeBody(mdeState) {
@@ -44,7 +44,7 @@ export class Question extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     props = props || {};
-    if (!state.id || state.id !== props.questionId) {
+    if (!state.id) {
       return {
         id: props.questionId,
         title: props.title,
@@ -69,10 +69,6 @@ export class Question extends React.Component {
   renderEdit() {
     return <div className="edit">
       <input value={this.state.title} onChange={this.events.onChangeTitle}/>
-      <TagEditor tags={this.state.tags}
-                 onSuggestTags={this.props.tagHandler.onTagSuggest}
-                 onInventNewTag={this.props.tagHandler.onTagInventNew}
-                 onChangeTags={this.events.onChangeTags}/>
       <div className="mde">
         {this.props.test ? "" : <ReactMde
           onChange={this.events.onChangeBody}
@@ -80,6 +76,9 @@ export class Question extends React.Component {
           layout="tabbed"
           generateMarkdownPreview={(markdown) => Promise.resolve(this.converter.makeHtml(markdown))}/>}
       </div>
+      <TagEditor tags={this.state.tags}
+                 onSuggestTags={this.props.tagHandler.onTagSuggest}
+                 onChangeTags={this.events.onChangeTags}/>
     </div>;
   }
 
@@ -116,6 +115,5 @@ Question.propTypes = {
   tagHandler: PropTypes.shape({
     onTagClicked: PropTypes.func.isRequired,
     onTagSuggest: PropTypes.func.isRequired,
-    onTagInventNew: PropTypes.func.isRequired,
   }).isRequired,
 };

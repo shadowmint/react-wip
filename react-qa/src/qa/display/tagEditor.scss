@@ -1,0 +1,13 @@
+.component--TagEditor {
+  .component--TagList {
+    display: inline-block;
+  }
+  .suggestion {
+    background: #ffffff;
+    z-index: 2323;
+    &.selected {
+      background: #efefef;
+    }
+  }
+  display: inline-block;
+}
