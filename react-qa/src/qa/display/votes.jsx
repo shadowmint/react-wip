@@ -1,21 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import "./votes.scss";
 
-export class TemplateProp {
-}
-
-export class Template extends React.Component {
+export class Votes extends React.Component {
   render() {
-    return <div>
-      <span id={this.props.id}>
-        {this.props.id}
-      </span>
+    return <div className="component--Votes">
+      <div className="details">
+        <li>
+          <div className="up"/>
+        </li>
+        <li>
+          <div className="votes">{this.props.votes}</div>
+        </li>
+        <li>
+          <div className="down"/>
+        </li>
+        <li className="star-container">
+          <div className="star"/>
+        </li>
+      </div>
+      <div className="content">
+        {this.props.children}
+      </div>
     </div>;
   }
 }
 
-Template.propTypes = {
-  id: PropTypes.string.isRequired
+Votes.propTypes = {
+  // The metadata voting object type, eg. answer, question, etc.
+  dataType: PropTypes.string.isRequired,
+
+  // The unique identifier of this piece of content
+  dataId: PropTypes.string.isRequired,
+
+  // Number of vote for this piece of content
+  votes: PropTypes.number.isRequired,
+
+  // The inner content to render in this voting block
+  children: PropTypes.node.isRequired,
+
+  // If this is in edit mode, the user can interact with it
+  edit: PropTypes.bool.isRequired
 };
 
 /*Template.propTypes = {
@@ -69,7 +94,4 @@ Template.propTypes = {
 
   // A value of any data type
   requiredAny: PropTypes.any.isRequired,
-
-  // Children
-  children: PropTypes.node.isRequired,
 };*/

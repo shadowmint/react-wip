@@ -52,19 +52,21 @@ export class TagEditor extends React.Component {
 
   render() {
     return <div className="component--TagEditor">
+      <div className="editor">
+        <Autocomplete
+          wrapperStyle={{}}
+          items={this.state.suggestions}
+          shouldItemRender={() => true}
+          getItemValue={item => item}
+          renderItem={TagEditor.renderDropdownItem}
+          value={this.state.value}
+          onChange={this.events.onUpdatePartialValue}
+          onSelect={this.events.onSelectedSuggestion}/>
+      </div>
       <TagList tags={this.props.tags}
                edit={true}
                onClickTag={this.events.onClickTag}
                onRemoveTag={this.events.onRemoveTag}/>
-      <Autocomplete
-        items={this.state.suggestions}
-        shouldItemRender={() => true}
-        getItemValue={item => item}
-        renderItem={TagEditor.renderDropdownItem}
-        value={this.state.value}
-        onChange={this.events.onUpdatePartialValue}
-        onSelect={this.events.onSelectedSuggestion}
-      />
     </div>;
   }
 

@@ -1,4 +1,9 @@
 .component--Question {
+  > div {
+    > h1 {
+      margin: 0px;
+    }
+  }
   .edit {
     display: flex;
     flex-direction: column;

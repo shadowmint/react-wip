@@ -69,4 +69,7 @@ Template.propTypes = {
 
   // A value of any data type
   requiredAny: PropTypes.any.isRequired,
+
+  // Children
+  children: PropTypes.node.isRequired,
 };*/
