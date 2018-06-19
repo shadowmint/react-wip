@@ -7,6 +7,7 @@ module.exports = {
     filename: 'index.js'
   },
   devServer: {
+    historyApiFallback: true,
     contentBase: path.join(__dirname),
   },
   resolve: {
