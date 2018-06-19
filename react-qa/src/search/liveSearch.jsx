@@ -1,29 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Spinner from '../glyphs/spinner';
+import Stop from '../glyphs/stop';
+import './liveSearch.scss';
 
-export class LiveSearch extends React.Component {
-  render() {
-    return <div>
-      <input type="text"/>
-      {this.props.loading ? this.renderLoading() : ""}
-    </div>;
-  }
+function LoadingIndicator() {
+  return (
+    <div className="loading">
+      <Spinner size={16} />
+      <Stop size={16} />
+    </div>
+  );
+}
 
-  renderLoading() {
-    return (
+export default function LiveSearch(props) {
+  return (
+    <div className="component--LiveSearch">
       <div>
-        Loading...
+        <input type="text" />
+        {props.loading ? <LoadingIndicator /> : ''}
       </div>
-    );
-  }
+      <div className="results" />
+    </div>
+  );
 }
 
 LiveSearch.propTypes = {
   // Are we busy loading stuff?
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
 };
 
-/*Template.propTypes = {
+/* Template.propTypes = {
   // You can declare that a prop is a specific JS primitive. By default, these
   // are all optional.
   optionalArray: PropTypes.array,
@@ -77,4 +84,4 @@ LiveSearch.propTypes = {
 
   // Children
   children: PropTypes.node.isRequired,
-};*/
+}; */
