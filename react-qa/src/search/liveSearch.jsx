@@ -3,31 +3,136 @@ import PropTypes from 'prop-types';
 import Spinner from '../glyphs/spinner';
 import Stop from '../glyphs/stop';
 import './liveSearch.scss';
+import Debounce from '../common/debounce';
+import RequestStream from '../common/requestStream';
 
-function LoadingIndicator() {
-  return (
-    <div className="loading">
-      <Spinner size={16} />
-      <Stop size={16} />
-    </div>
-  );
-}
+export default class LiveSearch extends React.Component {
+  constructor(props) {
+    super(props);
+    this.changes = new RequestStream(new Debounce(100), (error) => {
+      this.setState({ error });
+    });
+    this.state = {
+      error: null,
+      suggestions: [],
+      loading: false,
+      query: '',
+    };
+    this.events = {
+      onQueryChanged: e => this.onQueryChanged(e),
+      onStop: e => this.onStopRequests(e),
+    };
+  }
 
-export default function LiveSearch(props) {
-  return (
-    <div className="component--LiveSearch">
-      <div>
-        <input type="text" />
-        {props.loading ? <LoadingIndicator /> : ''}
+  onQueryChanged(e) {
+    this.setState({
+      query: e.target.value,
+      error: null,
+    }, () => {
+      this.changes.task(
+        () => {
+          this.setState({
+            loading: true,
+          });
+          return this.props.onQuery(this.state.query);
+        },
+        (suggestions) => {
+          this.setState({
+            suggestions,
+            loading: false,
+          });
+        },
+        (error, wasCancelled) => {
+          if (!wasCancelled) {
+            console.log("Got an error", error);
+            this.setState({ error, loading: false });
+          }
+        },
+      );
+    });
+  }
+
+  onStopRequests(e) {
+    console.log("Stop");
+    e.preventDefault();
+    this.changes.cancel();
+    this.setState({ loading: false });
+    return false;
+  }
+
+  renderResult(item) {
+    return (
+      <SearchResult key={item.id}>
+        {this.props.renderSuggestion(item)}
+      </SearchResult>
+    );
+  }
+
+  render() {
+    return (
+      <div className="component--LiveSearch">
+        <div>
+          <input type="text" value={this.state.query} onChange={this.events.onQueryChanged} />
+          {this.state.loading ? <LoadingIndicator onHaltClick={this.events.onStop} /> : ''}
+        </div>
+        {this.state.error ? <ErrorMessage error={this.state.error} /> : ''}
+        <div className="results">
+          {this.state.suggestions.map(i => this.renderResult(i))}
+        </div>
       </div>
-      <div className="results" />
-    </div>
-  );
+    );
+  }
+
+
 }
 
 LiveSearch.propTypes = {
-  // Are we busy loading stuff?
-  loading: PropTypes.bool.isRequired,
+  // Handle query requests; (q) => Promise<object[]>
+  onQuery: PropTypes.func.isRequired,
+
+  // Render the suggestion for a query
+  renderSuggestion: PropTypes.func.isRequired,
+};
+
+function SearchResult(props) {
+  return (
+    <div className="result">
+      Result...
+      {props.children}
+    </div>
+  );
+}
+
+function ErrorMessage(props) {
+  return (
+    <div className="error">
+      Error
+      <div>
+        {props.error.message}
+      </div>
+    </div>
+  );
+}
+
+ErrorMessage.propTypes = {
+  // The error message to render
+  error: PropTypes.instanceOf(Error).isRequired,
+};
+
+function LoadingIndicator(props) {
+  return (
+    <div className="loading">
+      <Spinner size={16} />
+      <button onClick={props.onHaltClick} style={{ width: 16, height: 16 }}>
+        <Stop size={16} />
+      </button>
+    </div>
+  );
+}
+
+LoadingIndicator.propTypes = {
+  // A handler to invoke when stop is clicked on
+  onHaltClick: PropTypes.func.isRequired,
 };
 
 /* Template.propTypes = {

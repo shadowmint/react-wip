@@ -1,8 +1,8 @@
-import {BrowserRouter, Link, Route} from 'react-router-dom';
+import { BrowserRouter, Link, Route } from 'react-router-dom';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {QuestionsDemo} from './pages/questionsDemo';
-import {SearchDemo} from './pages/searchDemo';
+import { QuestionsDemo } from './pages/questionsDemo';
+import SearchDemo from './pages/searchDemo';
 import GlyphDemo from './pages/glyphDemo';
 import './index.scss';
 
@@ -15,9 +15,9 @@ const App = () => (
       <Link to="/glyphDemo">Glyph Demo</Link>
     </nav>
     <div>
-      <Route path="/questionsDemo" component={QuestionsDemo}/>
-      <Route path="/searchDemo" component={SearchDemo}/>
-      <Route path="/glyphDemo" component={GlyphDemo}/>
+      <Route path="/questionsDemo" component={QuestionsDemo} />
+      <Route path="/searchDemo" component={SearchDemo} />
+      <Route path="/glyphDemo" component={GlyphDemo} />
     </div>
   </div>
 );
@@ -25,7 +25,7 @@ const App = () => (
 ReactDOM.render(
   (
     <BrowserRouter>
-      <App/>
+      <App />
     </BrowserRouter>
   ), document.getElementById('root'),
 );
