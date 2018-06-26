@@ -1,5 +1,8 @@
 import React from 'react';
+import { BrowserRouter, Link, Route } from 'react-router-dom';
 import PangulHeader from '../elements/layout/pangulHeader';
+import HomeSection from './sections/home/homeSection';
+import {QuestionsSection} from './sections/questions/questionsSection';
 import './pangulLayout.scss';
 
 export class PangulLayout extends React.Component {
@@ -7,9 +10,12 @@ export class PangulLayout extends React.Component {
     return (
       <div className="component--PangulLayout">
         <PangulHeader />
-        <div>
-          Content goes here
-        </div>
+        <BrowserRouter>
+          <div>
+            <Route path="/" component={HomeSection} />
+            <Route path="/questions" component={QuestionsSection} />
+          </div>
+        </BrowserRouter>
       </div>
     );
   }
