@@ -15,9 +15,6 @@ module.exports = {
     extensions: ['*', '.js', '.jsx'],
   },
   module: {
-    env: {
-      browser: true
-    },
     rules: [
       {
         test: /\.jsx?$/,

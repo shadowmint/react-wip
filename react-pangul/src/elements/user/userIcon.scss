@@ -1,0 +1,9 @@
+.component--UserIcon {
+  display: inline-block;
+  height: 2em;
+  width: 2em;
+  overflow: hidden;
+  > img {
+    height: 2em;
+  }
+}
