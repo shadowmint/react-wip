@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { UserContext } from '../../contexts/userContext';
-
-export class LoginFormProp {
-}
+import './login.scss';
 
 const LoginLoading = () => (
   <div>

@@ -5,6 +5,18 @@ import NotAuthorized from './notAuthorized';
 
 
 export default class RequiresPermission extends React.Component {
+  static updateUserSubscription(userContext, prevState) {
+    if (prevState.subscription) {
+      prevState.subscription.unsubscribe();
+    }
+    return {
+      user: userContext.user,
+      userContext,
+      onUserChanged: prevState.onUserChanged,
+      subscription: userContext.userStore.subscribe(prevState.onUserChanged),
+    };
+  }
+
   constructor(props) {
     super(props);
     this.state = RequiresPermission.updateUserSubscription(props.userContext, {
@@ -21,25 +33,20 @@ export default class RequiresPermission extends React.Component {
     return RequiresPermission.updateUserSubscription(nextProps.userContext, prevState || {});
   }
 
+  componentWillUnmount() {
+    if (this.state.subscription) {
+      this.state.subscription.unsubscribe();
+    }
+  }
+
   hasPermission() {
     try {
-      return this.state.userContext.authService.userHasPermissions(this.state.user, this.props.permissions);
+      const { authService } = this.state.userContext;
+      return authService.userHasPermissions(this.state.user, this.props.permissions);
     } catch (error) {
       this.state.userContext.logger.error(error);
       return false;
     }
-  }
-
-  static updateUserSubscription(userContext, prevState) {
-    if (prevState.subscription) {
-      prevState.subscription.unsubscribe();
-    }
-    return {
-      user: userContext.user,
-      userContext,
-      onUserChanged: prevState.onUserChanged,
-      subscription: userContext.userStore.subscribe(prevState.onUserChanged),
-    };
   }
 
   render() {
@@ -52,12 +59,6 @@ export default class RequiresPermission extends React.Component {
         {hasPermission ? content : fallback}
       </React.Fragment>
     );
-  }
-
-  componentWillUnmount() {
-    if (this.state.subscription) {
-      this.state.subscription.unsubscribe();
-    }
   }
 }
 
