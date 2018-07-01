@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {UserContext} from '../../contexts/userContext';
+import { UserContext } from '../../contexts/userContext';
 
 export class LoginFormProp {
 }
@@ -45,11 +45,14 @@ export default class Login extends React.Component {
   onLogin(data) {
     this.setState({ loading: true, error: null }, async () => {
       try {
-        const user = await this.props.onLoginAttempt(this.state.username, this.state.password);
+        const { authService } = this.props.userContext;
+        const user = await authService.login(this.state.username, this.state.password);
+        console.log(user);
         this.setState({
           loading: false, error: null, password: '', username: '',
-        }, () => {
-          this.props.onLoggedIn(user);
+        }, async () => {
+          console.log("Publish?");
+          await authService.publish(this.props.userContext, user);
         });
       } catch (error) {
         this.setState({ error, loading: false });
@@ -91,7 +94,4 @@ export default class Login extends React.Component {
 Login.propTypes = {
   // The user context for this component
   userContext: PropTypes.instanceOf(UserContext).isRequired,
-
-  // Handler to invoke when this user is actually logged in
-  onLoggedIn: PropTypes.func.isRequired,
 };

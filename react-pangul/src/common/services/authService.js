@@ -5,6 +5,18 @@ export class AuthService {
     return Promise.reject(new Error('Not implemented'));
   }
 
+  /** Return a promise for logout */
+  logout(context) {
+    return Promise.reject(new Error('Not implemented'));
+  }
+
+  /** Publish a change to the user on a context */
+  publish(context, user) {
+    context.user = user;
+    context.userStore.next(user);
+    console.log("New user store value", user);
+  }
+
   /** Check if a user has the required permissions */
   userHasPermissions(user, permissions) {
     if (!permissions) return false;

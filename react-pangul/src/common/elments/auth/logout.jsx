@@ -32,11 +32,12 @@ export default class Logout extends React.Component {
   onLogout(data) {
     this.setState({ loading: true, error: null }, async () => {
       try {
-        await this.props.onLogoutAttempt();
+        const { authService } = this.props.userContext;
+        await authService.logout(this.props.userContext);
         this.setState({
           loading: false, error: null,
-        }, () => {
-          this.props.onLoggedOut();
+        }, async () => {
+          await authService.publish(this.props.userContext, null);
         });
       } catch (error) {
         this.setState({ error, loading: false });
@@ -67,7 +68,4 @@ export default class Logout extends React.Component {
 Logout.propTypes = {
   // The user context for this component
   userContext: PropTypes.instanceOf(UserContext).isRequired,
-
-  // Handler to invoke when this user is actually logged in
-  onLoggedOut: PropTypes.func.isRequired,
 };

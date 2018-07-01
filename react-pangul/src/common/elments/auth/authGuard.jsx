@@ -5,7 +5,7 @@ import { AuthService } from '../../services/authService';
 import { Logger } from '../../services/logger';
 import RequiresPermission from './requiresPermission';
 import Login from './login';
-import {UserContext} from '../../contexts/userContext';
+import { UserContext } from '../../contexts/userContext';
 
 export class AuthGuardProp {
 }
@@ -17,54 +17,69 @@ export class AuthGuardProp {
 export default class AuthGuard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      user: null,
-    };
+    this.state = RequiresPermission.updateUserSubscription(props.userContext, {
+      onUserChanged: (user) => {
+        this.setState({ user });
+      },
+    });
     this.events = {
-      onLoginAttempt: (username, password) => this.props.authService.login(username, password),
       onLoggedIn: user => this.setState({ user }),
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState) {
+      if (prevState.userContext === nextProps.userContext) return prevState;
+    }
+    return RequiresPermission.updateUserSubscription(nextProps.userContext, prevState || {});
+  }
+
+  static updateUserSubscription(userContext, prevState) {
+    if (prevState.subscription) {
+      prevState.subscription.unsubscribe();
+    }
+    return {
+      user: userContext.user,
+      userContext,
+      onUserChanged: prevState.onUserChanged,
+      subscription: userContext.userStore.subscribe(prevState.onUserChanged),
     };
   }
 
   renderLogin() {
     return (
-      <Login
-        onLoginAttempt={this.events.onLoginAttempt}
-        onLoggedIn={this.events.onLoggedIn}
-      />
+      <Login userContext={this.props.userContext} onLoggedIn={this.events.onLoggedIn} />
     );
   }
 
   renderContent() {
     return (
       <RequiresPermission
-        user={this.state.user}
-        logger={this.props.logger}
-        authService={this.props.authService}
-        permissions={this.props.permissions}
-        fallback={this.props.fallback}
+        userContext={this.props.userContext}
+        permissions={[]}
       > {this.props.children}
       </RequiresPermission>
     );
   }
 
   render() {
+    console.log("Render: AUTHGUARD");
     return (
       <React.Fragment>
         {this.state.user ? this.renderContent() : this.renderLogin()}
       </React.Fragment>
     );
   }
+
+  componentWillUnmount() {
+    if (this.state.subscription) {
+      this.state.subscription.unsubscribe();
+    }
+  }
 }
 
 AuthGuard.propTypes = {
   userContext: PropTypes.instanceOf(UserContext).isRequired,
-
-  // The fallback to use if the user has no permission
-  fallback: PropTypes.node,
-
-  // The set permissions the user requires to see this content
-  permissions: PropTypes.arrayOf(PropTypes.string).isRequired,
 
   // Content to render if the user does have permission
   children: PropTypes.oneOfType([

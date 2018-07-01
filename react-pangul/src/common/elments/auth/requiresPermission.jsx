@@ -3,41 +3,70 @@ import PropTypes from 'prop-types';
 import { UserContext } from '../../contexts/userContext';
 import NotAuthorized from './notAuthorized';
 
-function hasPermissionForRestrictedContent(user, permissions, authService, logService) {
-  try {
-    console.log(user);
-    console.log(permissions);
-    return authService.userHasPermissions(user, permissions);
-  } catch (error) {
-    logService.error(error);
-    return false;
+
+export default class RequiresPermission extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = RequiresPermission.updateUserSubscription(props.userContext, {
+      onUserChanged: (user) => {
+        this.setState({ user });
+      },
+    });
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState) {
+      if (prevState.userContext === nextProps.userContext) return prevState;
+    }
+    return RequiresPermission.updateUserSubscription(nextProps.userContext, prevState || {});
+  }
+
+  hasPermission() {
+    try {
+      return this.state.userContext.authService.userHasPermissions(this.state.user, this.props.permissions);
+    } catch (error) {
+      this.state.userContext.logger.error(error);
+      return false;
+    }
+  }
+
+  static updateUserSubscription(userContext, prevState) {
+    if (prevState.subscription) {
+      prevState.subscription.unsubscribe();
+    }
+    return {
+      user: userContext.user,
+      userContext,
+      onUserChanged: prevState.onUserChanged,
+      subscription: userContext.userStore.subscribe(prevState.onUserChanged),
+    };
+  }
+
+  render() {
+    const hasPermission = this.hasPermission();
+    const children = React.Children.map(this.props.children, child => child, null) || [];
+    const content = children.filter(i => i.type !== NotAuthorized);
+    const fallback = children.filter(i => i.type === NotAuthorized);
+    return (
+      <React.Fragment>
+        {hasPermission ? content : fallback}
+      </React.Fragment>
+    );
+  }
+
+  componentWillUnmount() {
+    if (this.state.subscription) {
+      this.state.subscription.unsubscribe();
+    }
   }
 }
 
-export default function RequiresPermission(props) {
-  const hasPermission = hasPermissionForRestrictedContent(
-    props.userContext.user,
-    props.permissions,
-    props.userContext.authService,
-    props.userContext.logger,
-  );
-  const children = React.Children.map(props.children, child => child, null) || [];
-  const content = children.filter(i => i.type !== NotAuthorized);
-  const fallback = children.filter(i => i.type === NotAuthorized);
-  console.log("Rendering", hasPermission, content, fallback);
-  return (
-    <React.Fragment>
-      {hasPermission ? content : fallback}
-    </React.Fragment>
-  );
-}
-
 RequiresPermission.propTypes = {
+  // The permissions required for this block
+  permissions: PropTypes.arrayOf(PropTypes.string).isRequired,
+
   // The user context for this component
   userContext: PropTypes.instanceOf(UserContext).isRequired,
-
-  // The set permissions the user requires to see this content
-  permissions: PropTypes.arrayOf(PropTypes.string).isRequired,
 
   // Content to render if the user does have permission
   children: PropTypes.oneOfType([

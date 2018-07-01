@@ -19,6 +19,7 @@
     "react-autocomplete": "^1.8.1",
     "react-dom": "^16.0.0",
     "react-mde": "^5.5.1",
+    "rxjs": "^6.2.1",
     "showdown": "^1.8.6"
   },
   "author": "",

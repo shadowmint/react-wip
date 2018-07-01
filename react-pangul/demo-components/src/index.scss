@@ -11,6 +11,11 @@ body {
   min-width: 512px;
   height: 400px;
   vertical-align: top;
+  .box {
+    padding: 1em;
+    margin: 1em;
+    border: thin solid #efefef;
+  }
   &.glyph {
     display: inline-flex;
     align-items: center;
