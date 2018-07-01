@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Link, Route } from 'react-router-dom';
-import PangulHeader from '../elements/layout/pangulHeader';
+import PangulHeader from './elements/layout/pangulHeader';
 import HomeSection from './sections/home/homeSection';
 import {QuestionsSection} from './sections/questions/questionsSection';
 import './pangulLayout.scss';

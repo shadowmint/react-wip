@@ -19,6 +19,21 @@ body {
     height: 80px;
     min-width: 80px;
   }
+
+  &.short {
+    width: calc(100% - 4em);
+    height: 2em;
+  }
+
+  .example--part {
+    vertical-align: top;
+    border: thin solid #efefef;
+    display: inline-block;
+    padding: 1em;
+    margin: 1em;
+    width: 30%;
+    height: 30%;
+  }
 }
 
 nav {

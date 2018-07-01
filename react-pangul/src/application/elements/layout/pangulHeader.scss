@@ -1,0 +1,14 @@
+@import '../../../styles/colors';
+
+.component--PangulHeader {
+  display: flex;
+  width: 100%;
+  height: 2em;
+  border-bottom: thin solid $pangulColorPrimaryBorder;
+  line-height: 2em;
+  .filler {
+    flex-grow: 1;
+  }
+  .icon {
+  }
+}

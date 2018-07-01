@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "gulp && cd demo && webpack build",
-    "start": "cd demo && webpack-dev-server"
+    "start": "cd demo && webpack-dev-server",
+    "components": "cd demo-components && cross-env NODE_ENV=development webpack-dev-server"
   },
   "files": [
     "src",
@@ -13,19 +14,22 @@
   ],
   "dependencies": {
     "draft-js": "^0.10.5",
+    "prop-types": "^15.6.1",
     "react": "^16.0.0",
     "react-autocomplete": "^1.8.1",
     "react-dom": "^16.0.0",
     "react-mde": "^5.5.1",
-    "prop-types": "^15.6.1",
     "showdown": "^1.8.6"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-react-jsx": "^6.23.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-react-app": "^3.1.2",
     "babelify": "^7.3.0",
     "browserify": "^14.5.0",
     "css-loader": "^0.28.11",
@@ -38,6 +42,7 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-react": "^7.9.1",
     "eslint-plugin-standard": "^3.1.0",
+    "file-loader": "^1.1.11",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-intercept": "^0.1.0",

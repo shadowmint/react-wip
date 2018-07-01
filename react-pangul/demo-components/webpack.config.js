@@ -1,10 +1,11 @@
 const path = require('path');
+
 module.exports = {
   mode: 'development',
   entry: './src/index.jsx',
   output: {
     path: path.resolve('build'),
-    filename: 'index.js'
+    filename: 'index.js',
   },
   devServer: {
     historyApiFallback: true,
@@ -16,21 +17,27 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.png?$/,
+        use: {
+          loader: 'file-loader',
+        },
+      },
+      {
         test: /\.jsx?$/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.scss$/,
         use: [{
-          loader: "style-loader"
+          loader: 'style-loader',
         }, {
-          loader: "css-loader"
+          loader: 'css-loader',
         }, {
-          loader: "sass-loader"
-        }]
+          loader: 'sass-loader',
+        }],
       },
-    ]
-  }
+    ],
+  },
 };

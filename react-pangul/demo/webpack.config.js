@@ -17,6 +17,12 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.png?$/,
+        use: {
+          loader: 'file-loader',
+        },
+      },
+      {
         test: /\.jsx?$/,
         use: {
           loader: 'babel-loader',
@@ -24,13 +30,14 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: [{
-          loader: 'style-loader',
-        }, {
-          loader: 'css-loader',
-        }, {
-          loader: 'sass-loader',
-        }],
+        use: [
+          {
+            loader: 'style-loader',
+          }, {
+            loader: 'css-loader',
+          }, {
+            loader: 'sass-loader',
+          }],
       },
     ],
   },

@@ -4,21 +4,37 @@ import PropTypes from 'prop-types';
 export class TemplateProp {
 }
 
-export class Template extends React.Component {
-  render() {
-    return <div>
-      <span id={this.props.id}>
-        {this.props.id}
+export default function Template(props) {
+  return (
+    <div>
+      <span id={props.id}>
+        {props.foo} - {props.bar.toString()}
+        <div>
+          {props.children}
+        </div>
       </span>
-    </div>;
-  }
+    </div>
+  );
 }
 
 Template.propTypes = {
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  foo: PropTypes.string,
+  bar: PropTypes.instanceOf(TemplateProp),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
 };
 
-/*Template.propTypes = {
+
+Template.defaultProps = {
+  foo: 'Hello',
+  bar: new TemplateProp(),
+  children: null,
+};
+
+/* Template.propTypes = {
   // You can declare that a prop is a specific JS primitive. By default, these
   // are all optional.
   optionalArray: PropTypes.array,
@@ -72,4 +88,4 @@ Template.propTypes = {
 
   // Children
   children: PropTypes.node.isRequired,
-};*/
+}; */
