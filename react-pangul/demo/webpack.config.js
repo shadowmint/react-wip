@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.jsx',
+  entry: ['whatwg-fetch', './src/index.jsx'],
   output: {
     path: path.resolve('build'),
     filename: 'index.js',
@@ -30,14 +30,13 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: [
-          {
-            loader: 'style-loader',
-          }, {
-            loader: 'css-loader',
-          }, {
-            loader: 'sass-loader',
-          }],
+        use: [{
+          loader: 'style-loader',
+        }, {
+          loader: 'css-loader',
+        }, {
+          loader: 'sass-loader',
+        }],
       },
     ],
   },

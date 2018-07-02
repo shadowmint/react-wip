@@ -1,6 +1,6 @@
 import React from 'react';
 import './pangulHeader.scss';
-import UserIcon from '../../common/elments/user/userIcon';
+import UserIcon from '../../../common/elments/user/userIcon';
 
 export default class PangulHeader extends React.Component {
   render() {

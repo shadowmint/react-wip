@@ -1,11 +1,11 @@
 {
-  "name": "react-template",
+  "name": "react-pangul",
   "version": "0.0.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
     "test": "gulp && cd demo && webpack build",
-    "start": "cd demo && webpack-dev-server",
+    "start": "cd demo && cross-env NODE_ENV=development webpack-dev-server",
     "components": "cd demo-components && cross-env NODE_ENV=development webpack-dev-server"
   },
   "files": [
@@ -16,11 +16,10 @@
     "draft-js": "^0.10.5",
     "prop-types": "^15.6.1",
     "react": "^16.0.0",
-    "react-autocomplete": "^1.8.1",
     "react-dom": "^16.0.0",
-    "react-mde": "^5.5.1",
+    "react-qa": "file:../react-qa",
     "rxjs": "^6.2.1",
-    "showdown": "^1.8.6"
+    "whatwg-fetch": "^2.0.4"
   },
   "author": "",
   "license": "MIT",
