@@ -1,21 +1,22 @@
 import React from 'react';
+import Spinner from 'react-qa/src/glyphs/spinner';
 import { PangulLayout } from './pangulLayout';
 import { PangulAuthService } from './services/pangulAuthService';
 import { PangulLogger } from './services/pangulLogger';
 import { UserContext } from '../common/contexts/userContext';
 import AuthGuard from '../common/elments/auth/authGuard';
 import { PangulApiService } from './services/pangulApiService';
-import Spinner from 'react-qa/src/glyphs/spinner';
 import './pangul.scss';
 
 export default class Pangul extends React.Component {
   constructor(props) {
     super(props);
-    this.api = new PangulApiService();
+    this.logger = new PangulLogger();
+    this.api = new PangulApiService(this.logger);
     this.state = {
       config: null,
       userContext: new UserContext(
-        new PangulAuthService(),
+        new PangulAuthService(this.api),
         new PangulLogger(),
       ),
     };

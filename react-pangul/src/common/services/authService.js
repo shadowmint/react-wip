@@ -14,7 +14,6 @@ export class AuthService {
   publish(context, user) {
     context.user = user;
     context.userStore.next(user);
-    console.log("New user store value", user);
   }
 
   /** Check if a user has the required permissions */
